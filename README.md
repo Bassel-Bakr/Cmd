@@ -1,7 +1,11 @@
 Cmd
 =
 
-Cmd is an open-source library licensed under Apache License, Version 2.0
+- Cmd is an open-source library licensed under Apache License, Version 2.0
+
+- Using this library you will be able to execute bash/shell commands easily in a new thread by default (other than MAIN thread) and get the output in String type.
+
+- You can also convert the output easily using the same library.
 
 Useage:
 =
