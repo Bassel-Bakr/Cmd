@@ -6,7 +6,7 @@ Cmd is an open-source library licensed under Apache License, Version 2.0
 Useage:
 =
 
-As simple as: (no root)
+- As simple as: (no root)
 
 >Cmd.SH.ex(String command);
 
@@ -22,7 +22,7 @@ As simple as: (no root)
 >Cmd.SH.ex(List\<String\> commands, boolean STDERR);
 
 
-(With root access)
+- (With root access)
 
 >Cmd.SU.ex(String command);
 
