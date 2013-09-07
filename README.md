@@ -3,7 +3,7 @@ Cmd
 
 - Cmd is an open-source library licensed under Apache License, Version 2.0
 
-- Using this library you will be able to execute bash/shell commands easily in a new thread by default (other than MAIN thread) and get the output in String type.
+- Using this library you will be able to execute bash/shell commands easily and get the output in plain text.
 
 - You can also convert the output easily using the same library.
 
@@ -55,7 +55,7 @@ Cmd.SU.ex(List<String> commands, boolean STDERR);
 ```java
 String output = Cmd.SU.ex(String command);
 
-String[] outputArray = Cmd.Convert.string2array(output);
+String[] outputArray = Convert.string2array(output);
 
-List<String> outputArray = Cmd.Convert.string2list(output);
+List<String> outputArray = Convert.string2list(output);
 ```
