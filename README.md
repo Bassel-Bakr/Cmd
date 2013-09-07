@@ -7,7 +7,7 @@ Cmd
 
 - You can also convert the output easily using the same library.
 
-Useage:
+Usage:
 =
 
 - Check root access:
