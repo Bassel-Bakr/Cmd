@@ -58,7 +58,7 @@ public class Execute extends Thread
 		}
 		catch (Exception e)
 		{
-			Log.d("[CMD ERROR]", e.toString());
+			Log.e("[CMD ERROR]", e.toString());
 		}
 	}
 }
