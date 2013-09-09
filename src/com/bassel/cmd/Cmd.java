@@ -18,39 +18,30 @@ package com.bassel.cmd;
 
 import android.util.*;
 import java.util.*;
-import java.util.concurrent.*;
 
 public class Cmd
 {
 	public static boolean Debug;
-	private static Process process;
-	private static Output stdout;
 	private static List<String> output;
-	private static Thread destroy;
+	private static Execute process;
 
 	private static String getOutput(String ns, String cmd, boolean stderr)
 	{
+		output = new ArrayList<String>();
+		process = new Execute(ns, Convert.string2list(cmd), stderr, output);
+		process.start();
 		try
 		{
-			output = new ArrayList<String>();
-			process = new ProcessBuilder(ns, "-c", cmd).redirectErrorStream(stderr).start();
-			stdout = new Output(process.getInputStream(), output);
-			stdout.start();
-			destroy = new Thread(new Runnable()
-				{
-					public void run()
-					{
-						process.destroy();
-					}				
-			});
-			stdout.join();
-			destroy.start();
+			process.join();
 			return Convert.list2string(output);
 		}
-
-		catch (Exception e)
+		catch (StringIndexOutOfBoundsException e)
 		{
-			Log.d("SHELL", e.toString());
+			return "";
+		}
+		catch(InterruptedException e)
+		{
+			Log.e("[CMD PROCESS INTERRUPTED]", e.toString());
 			return null;
 		}
 	}
