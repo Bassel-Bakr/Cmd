@@ -20,34 +20,36 @@ import java.io.*;
 import java.util.*;
 
 
-public class Output extends Thread
+public class Stdout extends Thread
 {
 	private String line;
 	private List<String> output;
 	private BufferedReader stdout;
 
-	public Output(InputStream inputStream, List<String> out)
+	public Stdout(InputStream inputStream, List<String> output)
 	{
 		stdout = new BufferedReader(new InputStreamReader(inputStream));
-		output = out;
+		this.output = output;
 	}
-	
+
 	public void run()
 	{
 		try
 		{
-			while((line = stdout.readLine()) != null)
+			while ((line = stdout.readLine()) != null)
 			{
 				output.add(line);
 			}
+			stdout.close();
 			
 			if (Cmd.Debug)
 			{
-				Log.d("[STDOUT]", Convert.list2string(output));
+				Log.d("[CMD STDOUT]", Convert.list2string(output));
 			}
-			stdout.close();
 		}
-		catch(Exception x){}
+		catch (Exception e)
+		{
+			//Log.e("[CMD STDOUT ERROR]", e.toString());
+		}
 	}
-
 }
