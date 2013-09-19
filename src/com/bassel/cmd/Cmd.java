@@ -25,10 +25,10 @@ public class Cmd
 	private static List<String> output;
 	private static Execute process;
 
-	private static String getOutput(String ns, String cmd, boolean stderr)
+	private static String getOutput(String ns, List<String> cmd, boolean stderr)
 	{
 		output = new ArrayList<String>();
-		process = new Execute(ns, Convert.string2list(cmd), stderr, output);
+		process = new Execute(ns, cmd, stderr, output);
 		process.start();
 		try
 		{
@@ -69,32 +69,32 @@ public class Cmd
 	{
 		public static String ex(String cmd)
 		{
-			return Cmd.getOutput("su" , cmd, false);
+			return Cmd.getOutput("su" , Convert.string2list(cmd), false);
 		}
 
 		public static String ex(String[] cmd)
 		{
-			return Cmd.getOutput("su", Convert.array2string(cmd), false);
+			return Cmd.getOutput("su", Convert.array2list(cmd), false);
 		}
 
 		public static String ex(List<String> cmd)
 		{
-			return Cmd.getOutput("su" , Convert.list2string(cmd), false);
+			return Cmd.getOutput("su" , cmd, false);
 		}
 
 		public static String ex(String cmd, boolean stderr)
 		{
-			return Cmd.getOutput("su" , cmd, stderr);
+			return Cmd.getOutput("su" , Convert.string2list(cmd), stderr);
 		}
 
 		public static String ex(String[] cmd, boolean stderr)
 		{
-			return Cmd.getOutput("su", Convert.array2string(cmd), stderr);
+			return Cmd.getOutput("su", Convert.array2list(cmd), stderr);
 		}
 
 		public static String ex(List<String> cmd, boolean stderr)
 		{
-			return Cmd.getOutput("su" , Convert.list2string(cmd), stderr);
+			return Cmd.getOutput("su" , cmd, stderr);
 		}
 	}
 
@@ -102,32 +102,32 @@ public class Cmd
 	{
 		public static String ex(String cmd)
 		{
-			return Cmd.getOutput("sh" , cmd, false);
+			return Cmd.getOutput("sh" , Convert.string2list(cmd), false);
 		}
 
 		public static String ex(String[] cmd)
 		{
-			return Cmd.getOutput("sh", Convert.array2string(cmd), false);
+			return Cmd.getOutput("sh", Convert.array2list(cmd), false);
 		}
 
 		public static String ex(List<String> cmd)
 		{
-			return Cmd.getOutput("sh" , Convert.list2string(cmd), false);
+			return Cmd.getOutput("sh" , cmd, false);
 		}
 
 		public static String ex(String cmd, boolean stderr)
 		{
-			return Cmd.getOutput("sh" , cmd, stderr);
+			return Cmd.getOutput("sh" , Convert.string2list(cmd), stderr);
 		}
 
 		public static String ex(String[] cmd, boolean stderr)
 		{
-			return Cmd.getOutput("sh", Convert.array2string(cmd), stderr);
+			return Cmd.getOutput("sh", Convert.array2list(cmd), stderr);
 		}
 
 		public static String ex(List<String> cmd, boolean stderr)
 		{
-			return Cmd.getOutput("sh" , Convert.list2string(cmd), stderr);
+			return Cmd.getOutput("sh" , cmd, stderr);
 		}
 	}
 }
