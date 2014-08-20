@@ -45,9 +45,9 @@ public class Convert
 		return g;
 	}
 
-	public static Object[] list2array(List list)
+	public static String[] list2array(List list)
 	{
-		return list.toArray();
+		return (String[])list.toArray(new String[list.size()]);
 	}
 
 	public static String list2string(List list)
@@ -60,7 +60,7 @@ public class Convert
 		return string.deleteCharAt(string.length()).toString();
 	}
 
-	public static Object[] string2array(String string)
+	public static String[] string2array(String string)
 	{
 		return string.split("\n");
 	}
