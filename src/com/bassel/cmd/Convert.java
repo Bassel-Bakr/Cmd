@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2013 Bassel
+ * Copyright (C) 2013-2014 Bassel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,60 +16,57 @@
 
 package com.bassel.cmd;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class Convert
 {
-
-	private static StringBuilder sb;
-
-	public static String bool2string(boolean b)
+	public static List array2list(Object[] array)
 	{
-		return String.valueOf(b);
+		return Arrays.asList(array);
 	}
 
-	public static int string2int(String s)
+	public static String array2string(Object[] array)
 	{
-		return Integer.parseInt(s);
-	}
-
-	public static String[] string2array(String s)
-	{
-		return s.split("\n");
-	}
-
-	public static List string2list(String s)
-	{
-		return Arrays.asList(s.split("\n"));
-	}
-
-	public static String list2string(List<String> ls)
-	{
-		sb = new StringBuilder();
-		for (String line : ls)
+		StringBuilder string = new StringBuilder();
+		for (Object line : array)
 		{
-			sb.append(line).append((char)10);
+			string.append(line + "\n");
 		}
-		return sb.substring(0, sb.length() - 1);
-	}
-
-	public static String array2string(String[] sa)
-	{
-		sb = new StringBuilder();
-		for (int i = 0; i < sa.length; i++)
+		String g = null;
+		try
 		{
-			sb.append(sa[i]).append((char)10);
+			g = string.substring(0, string.length() - 1).toString();
 		}
-		return sb.substring(0, sb.length() - 1);
+		catch(Exception e)
+		{
+			return "";
+		}
+		return g;
 	}
 
-	public static String[] list2array(List<String> ls)
+	public static Object[] list2array(List list)
 	{
-		return ls.toArray(new String[ls.size()]);
+		return list.toArray();
 	}
 
-	public static List array2list(String[] sa)
+	public static String list2string(List list)
 	{
-		return Arrays.asList(sa);
+		StringBuilder string = new StringBuilder();
+		for (String line : list)
+		{
+			string.append(line + "\n");
+		}
+		return string.deleteCharAt(string.length()).toString();
+	}
+
+	public static Object[] string2array(String string)
+	{
+		return string.split("\n");
+	}
+
+	public static List string2list(String string)
+	{
+		return array2list(string.split("\n"));
 	}
 }
