@@ -23,13 +23,6 @@ Cmd.SH.ex(String command, String... args);
 Cmd.SH.ex(String[] commands);
 
 Cmd.SH.ex(List<String> commands);
-
-
-Cmd.SH.ex(String command, boolean STDERR);
-
-Cmd.SH.ex(String[] commands, boolean STDERR);
-
-Cmd.SH.ex(List<String> commands, boolean STDERR);
 ```
 
 - With root access:
@@ -40,13 +33,6 @@ Cmd.SU.ex(String command, String... args);
 Cmd.SU.ex(String[] commands);
 
 Cmd.SU.ex(List<String> commands);
-
-
-Cmd.SU.ex(String command, boolean STDERR);
-
-Cmd.SU.ex(String[] commands, boolean STDERR);
-
-Cmd.SU.ex(List<String> commands, boolean STDERR);
 
 JavaRoot java = JavaRoot.newInstance(String packageName, String className, boolean isSystemApp);
 java.execute(String... args);
