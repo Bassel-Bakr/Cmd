@@ -3,9 +3,8 @@ Cmd
 
 - Cmd is an open-source library licensed under Apache License, Version 2.0
 
-- Using this library you will be able to execute bash/shell commands easily and get the output in plain text.
+- Using this library you will be able to execute bash/shell and even Java commands with root access easily and get the output in different formats.
 
-- You can also convert the output easily using the same library.
 
 Usage:
 =
@@ -19,7 +18,7 @@ Cmd.root();
 - No root:
 
 ```java
-Cmd.SH.ex(String command);
+Cmd.SH.ex(String command, String... args);
 
 Cmd.SH.ex(String[] commands);
 
@@ -36,7 +35,7 @@ Cmd.SH.ex(List<String> commands, boolean STDERR);
 - With root access:
 
 ```java
-Cmd.SU.ex(String command);
+Cmd.SU.ex(String command, String... args);
 
 Cmd.SU.ex(String[] commands);
 
@@ -48,14 +47,40 @@ Cmd.SU.ex(String command, boolean STDERR);
 Cmd.SU.ex(String[] commands, boolean STDERR);
 
 Cmd.SU.ex(List<String> commands, boolean STDERR);
+
+JavaRoot java = JavaRoot.newInstance(String packageName, String className, boolean isSystemApp);
+java.execute(String... args);
+java.executeInBackground(String... args);
 ```
 
-- Converting output (String by default):
+All previous methods aside of the last one:
+```java
+java.executeInBackground(String... args);
+```
+return an instance of type Output that has the following methods:
+```java
+boolean success()			//returns true if process exit value = 0 else false
+String getString()			//returns output in String format
+String[] getArray()			//returns output in String Array format
+List<String> getList()		//returns output in String List format
+int getExitValue()			//returns process exit value
+String toString()			//returns process status and output in String format
+```
+
+
+- Converting:
 
 ```java
-String output = Cmd.SU.ex(String command);
+String string = ...;
+String[] array = ...;
+List<String> list = ...;
 
-String[] outputArray = Convert.string2array(output);
+String s1 = Convert.array2string(array);
+String s2 = Convert.list2string(list);
 
-List<String> outputArray = Convert.string2list(output);
+String[] a1 = Convert.list2array(list);
+String[] a2 = Convert.string2array(string);
+
+List<String> a1 = Convert.array2list(array);
+List<String> a2 = Convert.string2list(string);
 ```
