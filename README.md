@@ -67,6 +67,6 @@ String s2 = Convert.list2string(list);
 String[] a1 = Convert.list2array(list);
 String[] a2 = Convert.string2array(string);
 
-List<String> a1 = Convert.array2list(array);
-List<String> a2 = Convert.string2list(string);
+List<String> l1 = Convert.array2list(array);
+List<String> l2 = Convert.string2list(string);
 ```
