@@ -27,7 +27,7 @@ public class Pool
 
 	private Pool()
 	{
-		service = Executors.newCachedThreadPool(this);
+		service = Executors.newCachedThreadPool();
 	}
 
 	public static Pool getInstance()
