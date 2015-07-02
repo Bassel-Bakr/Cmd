@@ -24,54 +24,52 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class Exec {
-	private static ExecutorService service;
+		private static ExecutorService service;
 
-	static
-	{
-		if (service == null) service = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-			if (service.isShutdown()) service = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-	}
+		static {
+				service = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+		}
 
-	public synchronized static void execute(Runnable runnable) {
-		service.execute(runnable);
-	}
+		public synchronized static void execute(Runnable runnable) {
+				service.execute(runnable);
+		}
 
-	public synchronized static void execute(Runnable[] runnables) {
-		for (Runnable runnable : runnables)
-			service.execute(runnable);
-	}
+		public synchronized static void execute(Runnable[] runnables) {
+				for (Runnable runnable : runnables)
+						service.execute(runnable);
+		}
 
-	public synchronized static void execute(List<Runnable> runnables) {
-		for (Runnable runnable : runnables)
-			service.execute(runnable);
-	}
+		public synchronized static void execute(List<Runnable> runnables) {
+				for (Runnable runnable : runnables)
+						service.execute(runnable);
+		}
 
-	public synchronized static Future<StringBuilder> submit(Runnable runnable, StringBuilder result) {
-		return service.submit(runnable, result);
-	}
+		public synchronized static Future<StringBuilder> submit(Runnable runnable, StringBuilder result) {
+				return service.submit(runnable, result);
+		}
 
-	public synchronized static Future<ShellResult> submit(Callable<ShellResult> callable) {
-		return service.submit(callable);
-	}
+		public synchronized static Future<ShellResult> submit(Callable<ShellResult> callable) {
+				return service.submit(callable);
+		}
 
-	public synchronized static Future<String>[] submit(Callable<String>[] callables) {
-		Future<String>[] futures = new Future[callables.length];
+		public synchronized static Future<String>[] submit(Callable<String>[] callables) {
+				Future<String>[] futures = new Future[callables.length];
 
-		for (int i = 0; i < callables.length; i++)
-			futures[i] = service.submit(callables[i]);
+				for (int i = 0; i < callables.length; i++)
+						futures[i] = service.submit(callables[i]);
 
-		return futures;
-	}
+				return futures;
+		}
 
-	public synchronized static List<Future<String>> submit(final List<Callable<String>> callables) {
-		return new ArrayList<Future<String>>()
-		{{
-				for (Callable<String> callable : callables)
-					add(service.submit(callable));
-			}};
-	}
+		public synchronized static List<Future<String>> submit(final List<Callable<String>> callables) {
+				return new ArrayList<Future<String>>()
+				{{
+								for (Callable<String> callable : callables)
+										add(service.submit(callable));
+						}};
+		}
 
-	public synchronized static void shutdown() {
-		service.shutdown();
-	}
+		public synchronized static void shutdown() {
+				service.shutdown();
+		}
 }
