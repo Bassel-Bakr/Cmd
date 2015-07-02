@@ -18,21 +18,21 @@ Cmd.root();
 - No root:
 
 ```java
-Cmd.SH.ex(String command, String... args);
+Cmd.SH.ex(T cmd, U... args);
 
-Cmd.SH.ex(String[] commands);
-
-Cmd.SH.ex(List<String> commands);
+cmd is our command
+args can be:
+	cmd formating args => must be right after cmd
+	bool redirectErrorStream => default: true
+	File path => current path
+	ILineListener => listens to new lines
+	IResultListener => fired at the very end
 ```
 
 - With root access:
 
 ```java
-Cmd.SU.ex(String command, String... args);
-
-Cmd.SU.ex(String[] commands);
-
-Cmd.SU.ex(List<String> commands);
+Cmd.SU.ex(T cmd, U... args);
 
 JavaRoot java = JavaRoot.newInstance(String packageName, String className, boolean isSystemApp);
 java.execute(String... args);
@@ -43,14 +43,13 @@ All previous methods aside of the last one:
 ```java
 java.executeInBackground(String... args);
 ```
-return an instance of type Output that has the following methods:
+return an instance of type ShellResult that has the following methods:
 ```java
-boolean success()			//returns true if process exit value = 0 else false
-String getString()			//returns output in String format
-String[] getArray()			//returns output in String Array format
-List<String> getList()		//returns output in String List format
-int getExitValue()			//returns process exit value
-String toString()			//returns process status and output in String format
+PrintWriter set/getWriter			//returns or sets process's PrintWriter
+String getString()						//returns output in String format
+String[] getArray()						//returns output in String Array format
+List<String> getList()		   	//returns output in String List format
+int getExitValue()						//returns process exit value
 ```
 
 
