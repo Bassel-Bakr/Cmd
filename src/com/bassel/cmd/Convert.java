@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2013-2014 Bassel
+ * Copyright (C) 2013-2014 Bassel Bakr
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,55 +18,56 @@ package com.bassel.cmd;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Future;
 
-public class Convert
-{
-	public static List array2list(Object[] array)
-	{
+public class Convert {
+	public synchronized static ShellResult future2present(Future<ShellResult> future) {
+		try {
+			return future.get();
+		} catch (Exception e) {Debug.log(e);
+			return null;}
+	}
+
+	public synchronized static List<String> array2list(String[] array) {
 		return Arrays.asList(array);
 	}
 
-	public static String array2string(Object[] array)
-	{
+	public synchronized static String array2string(String[] array) {
 		StringBuilder string = new StringBuilder();
-		for (Object line : array)
-		{
+		for (String line : array) {
 			string.append(line + "\n");
 		}
-		String g = null;
-		try
-		{
-			g = string.substring(0, string.length() - 1).toString();
-		}
-		catch(Exception e)
-		{
-			return "";
-		}
-		return g;
+		if (string.length() > 1)
+			string.deleteCharAt(string.length());
+		return string.toString();
 	}
 
-	public static String[] list2array(List list)
-	{
-		return (String[])list.toArray(new String[list.size()]);
+	public synchronized static String[] list2array(List<String> list) {
+		return list.toArray(new String[list.size()]);
 	}
 
-	public static String list2string(List list)
-	{
+	public synchronized static String list2string(List<String> list) {
 		StringBuilder string = new StringBuilder();
-		for (String line : list)
-		{
+		for (String line : list) {
 			string.append(line + "\n");
 		}
-		return string.deleteCharAt(string.length()).toString();
+		if (string.length() > 1)
+			string.deleteCharAt(string.length());
+		return string.toString();
 	}
 
-	public static String[] string2array(String string)
-	{
+	public synchronized static String[] string2array(String string) {
 		return string.split("\n");
 	}
 
-	public static List string2list(String string)
-	{
+	public synchronized static List<String> string2list(String string) {
 		return array2list(string.split("\n"));
+	}
+
+	public synchronized static String trimString(StringBuilder string) {
+		int len = string.length();
+		if (len > 1)
+			string.deleteCharAt(len - 1);
+		return string.toString();
 	}
 }

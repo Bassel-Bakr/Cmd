@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2013-2014 Bassel
+ * Copyright (C) 2013-2014 Bassel Bakr
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,313 +16,102 @@
 
 package com.bassel.cmd;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
+import java.util.concurrent.Future;
 
-public class Cmd
-{
-	private static Process proc;
-	private boolean interactive, excludeErrorStream;
-	private String initialCommand;
-	private volatile StringBuilder result;
-	private Listeners.LineListener lineListener;
-	private PrintWriter stdin;
-	private Runnable stdout/*, stderr*/;
-	private static Pool pool;
+public class Cmd {
+		public static class SH {
+				public static <T,U> Future<ShellResult> ex(T cmd, U... args) {
+						try {
+								File path = null;
+								boolean redirectErrorStream = true;
+								ILineListener lineListener = null;
+								IResultListener resultListener = null;
+								if (cmd instanceof String)
+										cmd = (T) String.format((String) cmd, args);
+								if (args != null)
+										for (int i = 0; i < args.length; i++)
+												if (args[i] instanceof ILineListener)
+														lineListener = (ILineListener) args[i];
+												else if (args[i] instanceof IResultListener)
+														resultListener = (IResultListener) args[i];
+												else if (args[i] instanceof Boolean)
+														redirectErrorStream = args[i];
+												else if (args[i] instanceof File)
+														path = (File) args[i];
+								return new Shell().start("sh", cmd, path, redirectErrorStream, lineListener, resultListener);
+						} catch (IOException e) {Debug.log(e);
+								e.printStackTrace();
+								return null;}
+				}
 
-	private Cmd(Shell builder)
-	{
-		proc = builder.proc;
-		initialCommand = builder.initialCommand;
-		interactive = builder.interactive;
-		lineListener = builder.lineListener;
-		result = builder.result;
-		stdout = builder.stdout;
-		//stderr = builder.stderr;
-		stdin = builder.stdin;
-		pool = Pool.getInstance();
-		pool.execute(stdout);
-		//pool.execute(stderr);
-		pool.shutdown();
-	}
-
-	public static class SH
-	{
-		private static Cmd cmd;
-
-		public static Output ex(String command, Object... args)
-		{
-			cmd = new Cmd.Shell()
-				.rootAccess(false)
-				.start();
-			if (args != null)cmd.write(String.format(command, args));
-			else cmd.write(command);
-			try
-			{
-				cmd.proc.waitFor();
-				//cmd.proc.destroy();
-				pool.execute(Destroyer.newInstance());
-			}
-			catch (InterruptedException e)
-			{e.printStackTrace();}
-			try
-			{
-				return Output.newInstance(cmd.proc.exitValue(), cmd.result.substring(0, cmd.result.length() - 1));
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-				return Output.newInstance(1, null);
-			}
+				public static <T> PrintWriter run(T... args) {
+						try {
+								File path = null;
+								boolean redirectErrorStream = true;
+								ILineListener lineListener = null;
+								IResultListener resultListener = null;
+								if (args != null)
+										for (int i = 0; i < args.length; i++)
+												if (args[i] instanceof ILineListener)
+														lineListener = (ILineListener) args[i];
+												else if (args[i] instanceof IResultListener)
+														resultListener = (IResultListener) args[i];
+												else if (args[i] instanceof Boolean)
+														redirectErrorStream = args[i];
+												else if (args[i] instanceof File)
+														path = (File) args[i];
+								return new Shell().startInteractive("sh", path, redirectErrorStream, lineListener, resultListener);
+						} catch (IOException e) {Debug.log(e);
+								return null;}
+				}
 		}
 
-		public static Output ex(String[] commands)
-		{
-			cmd = new Cmd.Shell()
-				.rootAccess(false)
-				.start();
-			cmd.write(commands);
-			try
-			{
-				cmd.proc.waitFor();
-				//cmd.proc.destroy();
-				pool.execute(Destroyer.newInstance());
-			}
-			catch (InterruptedException e)
-			{e.printStackTrace();}
-			try
-			{
-				return Output.newInstance(cmd.proc.exitValue(), cmd.result.substring(0, cmd.result.length() - 1));
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-				return Output.newInstance(1, null);
-			}
-		}
+		public static class SU extends Shell {
+				public static <T,U> Future<ShellResult> ex(T cmd, U... args) {
+						try {
+								File path = null;
+								boolean redirectErrorStream = true;
+								ILineListener lineListener = null;
+								IResultListener resultListener = null;
+								if (cmd instanceof String)
+										cmd = (T) String.format((String) cmd, args);
+								if (args != null)
+										for (int i = 0; i < args.length; i++)
+												if (args[i] instanceof ILineListener)
+														lineListener = (ILineListener) args[i];
+												else if (args[i] instanceof IResultListener)
+														resultListener = (IResultListener) args[i];
+												else if (args[i] instanceof Boolean)
+														redirectErrorStream = args[i];
+												else if (args[i] instanceof File)
+														path = (File) args[i];
+								return new Shell().start("su", cmd, path, redirectErrorStream, lineListener, resultListener);
+						} catch (IOException e) {Debug.log(e);
+								return null;}
+				}
 
-		public static Output ex(List<String> commands)
-		{
-			cmd = new Cmd.Shell()
-				.rootAccess(false)
-				.start();
-			cmd.write(commands);
-			try
-			{
-				cmd.proc.waitFor();
-				//cmd.proc.destroy();
-				pool.execute(Destroyer.newInstance());
-			}
-			catch (InterruptedException e)
-			{e.printStackTrace();}
-			try
-			{
-				return Output.newInstance(cmd.proc.exitValue(), cmd.result.substring(0, cmd.result.length() - 1));
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-				return Output.newInstance(1, null);
-			}
+				public static <T> PrintWriter run(T... args) {
+						try {
+								File path = null;
+								boolean redirectErrorStream = true;
+								ILineListener lineListener = null;
+								IResultListener resultListener = null;
+								if (args != null)
+										for (int i = 0; i < args.length; i++)
+												if (args[i] instanceof ILineListener)
+														lineListener = (ILineListener) args[i];
+												else if (args[i] instanceof IResultListener)
+														resultListener = (IResultListener) args[i];
+												else if (args[i] instanceof Boolean)
+														redirectErrorStream = args[i];
+												else if (args[i] instanceof File)
+														path = (File) args[i];
+								return new Shell().startInteractive("su", path, redirectErrorStream, lineListener, resultListener);
+						} catch (IOException e) {Debug.log(e);
+								return null;}
+				}				
 		}
-
-	}
-
-	public static class SU
-	{
-		private static Cmd cmd;
-
-		public static Output ex(String command, Object... args)
-		{
-			cmd = new Cmd.Shell()
-				.rootAccess(true)
-				.start();
-			if (args != null)cmd.write(String.format(command, args));
-			else cmd.write(command);
-			try
-			{
-				cmd.proc.waitFor();
-				//cmd.proc.destroy();
-				pool.execute(Destroyer.newInstance());
-			}
-			catch (InterruptedException e)
-			{e.printStackTrace();}
-			try
-			{
-				return Output.newInstance(cmd.proc.exitValue(), cmd.result.substring(0, cmd.result.length() - 1));
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-				return Output.newInstance(1, null);
-			}
-		}
-
-		public static Output ex(String[] commands)
-		{
-			cmd = new Cmd.Shell()
-				.rootAccess(true)
-				.start();
-			cmd.write(commands);
-			try
-			{
-				cmd.proc.waitFor();
-				//cmd.proc.destroy();
-				pool.execute(Destroyer.newInstance());
-			}
-			catch (InterruptedException e)
-			{e.printStackTrace();}
-			try
-			{
-				return Output.newInstance(cmd.proc.exitValue(), cmd.result.substring(0, cmd.result.length() - 1));
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-				return Output.newInstance(1, null);
-			}
-		}
-
-		public static Output ex(List<String> commands)
-		{
-			cmd = new Cmd.Shell()
-				.rootAccess(true)
-				.start();
-			cmd.write(commands);
-			try
-			{
-				cmd.proc.waitFor();
-				//cmd.proc.destroy();
-				pool.execute(Destroyer.newInstance());
-			}
-			catch (InterruptedException e)
-			{e.printStackTrace();}
-			try
-			{
-				return Output.newInstance(cmd.proc.exitValue(), cmd.result.substring(0, cmd.result.length() - 1));
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-				return Output.newInstance(1, null);
-			}
-		}
-
-	}
-
-	private static class Shell
-	{
-		private Process proc;
-		private boolean interactive = false,
-		includeErrorStream = true;
-		private String initialCommand;
-		private volatile StringBuilder result;
-		private Listeners.LineListener lineListener;
-		private PrintWriter stdin;
-		private Runnable stdout;
-
-		public Shell excludeErrorStream()
-		{
-			this.includeErrorStream = false;
-			return this;
-		}
-		
-		public Shell setLineListener(Listeners.LineListener lineListener)
-		{
-			this.lineListener = lineListener;
-			return this;
-		}
-
-		public Shell rootAccess(boolean root)
-		{
-			if (root)initialCommand = "su";
-			else initialCommand = "sh";
-			return this;
-		}
-		
-		public Shell setInteractive(boolean interactive)
-		{
-			this.interactive = interactive;
-			return this;
-		}
-
-		public Cmd start()
-		{
-			try
-			{
-				proc = new ProcessBuilder(initialCommand).redirectErrorStream(includeErrorStream).start();
-			}
-			catch (IOException e)
-			{e.printStackTrace();}
-			result = new StringBuilder();
-			stdin = new PrintWriter(proc.getOutputStream());
-			stdout = Stream.newInstance(proc.getInputStream(), lineListener, result);
-			return new Cmd(this);
-		}
-	}
-	
-	private static class Destroyer implements Runnable
-	{
-		public static Destroyer newInstance()
-		{
-			return new Destroyer();
-		}
-		
-		@Override
-		public void run()
-		{
-			proc.destroy();
-		}	
-	}
-	
-	public static boolean root()
-	{
-		return RootUtils.root();
-	}
-
-	public void write(String command)
-	{
-		stdin.write((command + "\n"));
-		stdin.flush();
-		Debug.log(command);
-		if (!interactive)
-		{
-			stdin.write("exit\n");
-			stdin.flush();
-			Debug.log("exit");
-		}
-	}
-
-	public void write(String[] commands)
-	{
-		for (String command : commands)
-		{
-			stdin.write((command + "\n"));
-			stdin.flush();
-		}
-		Debug.log(commands);
-		if (!interactive)
-		{
-			stdin.write("exit\n");
-			stdin.flush();
-			Debug.log("exit");
-		}
-	}
-
-	public void write(List<String> commands)
-	{
-		for (String command : commands)
-		{
-			stdin.write((command + "\n"));
-			stdin.flush();
-		}
-		Debug.log(commands);
-		if (!interactive)
-		{
-			stdin.write("exit\n");
-			stdin.flush();
-			Debug.log("exit");
-		}
-	}
 }

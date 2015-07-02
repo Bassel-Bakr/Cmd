@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2013-2014 Bassel
+ * Copyright (C) 2013 Bassel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,18 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+ 
 package com.bassel.cmd;
 
-public class Listeners
+public class Destroy extends Thread
 {
-	public interface LineListener
+	private Process p;
+	
+	public Destroy(Process p)
 	{
-		public void onLine(String line);
+		this.p = p;
 	}
 
-	public interface FinishListener
+	public void run()
 	{
-		public void onFinish(int id, String output);
+		p.destroy();
 	}
 }
