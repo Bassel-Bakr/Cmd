@@ -37,11 +37,11 @@ class StreamReader implements Callable {
 				this.resultListener = resultListener;
 		}
 
-		public synchronized static StreamReader newInstance(Process proc, boolean interactive, ILineListener lineListener) {return new StreamReader(proc, interactive, lineListener, null);}
+		public static StreamReader newInstance(Process proc, boolean interactive, ILineListener lineListener) {return new StreamReader(proc, interactive, lineListener, null);}
 
-		public synchronized static StreamReader newInstance(Process proc, boolean interactive, IResultListener resultListener) {return new StreamReader(proc, interactive, null, resultListener);}
+		public static StreamReader newInstance(Process proc, boolean interactive, IResultListener resultListener) {return new StreamReader(proc, interactive, null, resultListener);}
 
-		public synchronized static StreamReader newInstance(Process proc, boolean interactive, ILineListener lineListener, IResultListener resultListener) {return new StreamReader(proc, interactive, lineListener, resultListener);}
+		public static StreamReader newInstance(Process proc, boolean interactive, ILineListener lineListener, IResultListener resultListener) {return new StreamReader(proc, interactive, lineListener, resultListener);}
 
 		@Override
 		public ShellResult call() {
