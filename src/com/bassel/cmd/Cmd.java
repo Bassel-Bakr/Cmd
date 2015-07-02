@@ -70,6 +70,16 @@ public class Cmd {
 		}
 
 		public static class SU extends Shell {
+				public static boolean root() {
+						try {
+								Process proc = Runtime.getRuntime().exec("su -c id");
+								return proc.waitFor() == 0 ? true : false;
+						} catch (Exception e) {
+								Debug.log(e);
+								return false;
+						}
+				}
+
 				public static <T,U> Future<ShellResult> ex(T cmd, U... args) {
 						try {
 								File path = null;

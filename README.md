@@ -12,13 +12,14 @@ Usage:
 - Check root access:
 
 ```java
-Cmd.root();
+Cmd.SU.root();
 ```
 
 - No root:
 
 ```java
 Cmd.SH.ex(T cmd, U... args);
+```
 
 cmd is our command
 args can be:
@@ -27,7 +28,6 @@ args can be:
 	File path => current path
 	ILineListener => listens to new lines
 	IResultListener => fired at the very end
-```
 
 - With root access:
 
@@ -45,11 +45,12 @@ java.executeInBackground(String... args);
 ```
 return an instance of type ShellResult that has the following methods:
 ```java
-PrintWriter set/getWriter			//INTERACTIVE(O) returns or sets process's PrintWriter
-String getString()						//INTERACTIVE(X) returns output in String format
-String[] getArray()						//INTERACTIVE(X) returns output in String Array format
-List<String> getList()		   	//INTERACTIVE(X) returns output in String List format
-int getExitValue()						//INTERACTIVE(X) returns process exit value
+PrintWriter setWriter     //INTERACTIVE(O) sets process's PrintWriter
+void setWriter            //INTERACTIVE(O) returns process's PrintWriter
+String getString()        //INTERACTIVE(X) returns output in String format
+String[] getArray()       //INTERACTIVE(X) returns output in String Array format
+List<String> getList()    //INTERACTIVE(X) returns output in String List format
+int getExitValue()        //INTERACTIVE(X) returns process exit value
 ```
 
 
