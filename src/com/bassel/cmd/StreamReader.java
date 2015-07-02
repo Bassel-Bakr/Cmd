@@ -28,19 +28,20 @@ class StreamReader implements Callable {
 		private ILineListener lineListener;
 		private IResultListener resultListener;
 
-		private StreamReader(Process proc, ILineListener lineListener, IResultListener resultListener) {
+		private StreamReader(Process proc, boolean interactive, ILineListener lineListener, IResultListener resultListener) {
 				this.proc = proc;
 				this.in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-				builder = new StringBuilder("");
+				if (!interactive)
+						builder = new StringBuilder("");
 				this.lineListener = lineListener;
 				this.resultListener = resultListener;
 		}
 
-		public synchronized static StreamReader newInstance(Process proc, ILineListener lineListener) {return new StreamReader(proc, lineListener, null);}
+		public synchronized static StreamReader newInstance(Process proc, boolean interactive, ILineListener lineListener) {return new StreamReader(proc, interactive, lineListener, null);}
 
-		public synchronized static StreamReader newInstance(Process proc, IResultListener resultListener) {return new StreamReader(proc, null, resultListener);}
+		public synchronized static StreamReader newInstance(Process proc, boolean interactive, IResultListener resultListener) {return new StreamReader(proc, interactive, null, resultListener);}
 
-		public synchronized static StreamReader newInstance(Process proc, ILineListener lineListener, IResultListener resultListener) {return new StreamReader(proc, lineListener, resultListener);}
+		public synchronized static StreamReader newInstance(Process proc, boolean interactive, ILineListener lineListener, IResultListener resultListener) {return new StreamReader(proc, interactive, lineListener, resultListener);}
 
 		@Override
 		public ShellResult call() {
@@ -54,7 +55,6 @@ class StreamReader implements Callable {
 				if (resultListener != null) resultListener.onResult(Convert.trimString(builder));
 				try {
 						int exitValue = proc.waitFor();
-						
 						proc.destroy();
 						return ShellResult.newInstance(Convert.trimString(builder), exitValue);
 				} catch (Exception e) {Debug.log(e);}

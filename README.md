@@ -45,11 +45,11 @@ java.executeInBackground(String... args);
 ```
 return an instance of type ShellResult that has the following methods:
 ```java
-PrintWriter set/getWriter			//returns or sets process's PrintWriter
-String getString()						//returns output in String format
-String[] getArray()						//returns output in String Array format
-List<String> getList()		   	//returns output in String List format
-int getExitValue()						//returns process exit value
+PrintWriter set/getWriter			//INTERACTIVE(O) returns or sets process's PrintWriter
+String getString()						//INTERACTIVE(X) returns output in String format
+String[] getArray()						//INTERACTIVE(X) returns output in String Array format
+List<String> getList()		   	//INTERACTIVE(X) returns output in String List format
+int getExitValue()						//INTERACTIVE(X) returns process exit value
 ```
 
 

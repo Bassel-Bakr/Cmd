@@ -26,7 +26,7 @@ import java.util.concurrent.Future;
  * @hide
  *
  */
- public class Shell {
+public class Shell {
 
 		public synchronized <T> Future<ShellResult> start(String cmd, T commands, File path, boolean redirectErrorStream, ILineListener lineListener, IResultListener resultListener) throws IOException {
 				ProcessBuilder builder = new ProcessBuilder(cmd).redirectErrorStream(redirectErrorStream);
@@ -38,8 +38,8 @@ import java.util.concurrent.Future;
 				try {
 						QuickStreamWriter.write(proc, "exit");
 				} catch (Exception e) {Debug.log(e);
-				e.printStackTrace();}
-				return Exec.submit(StreamReader.newInstance(proc, lineListener, resultListener));
+						e.printStackTrace();}
+				return Exec.submit(StreamReader.newInstance(proc, false, lineListener, resultListener));
 		}
 
 		/** @hide */
@@ -50,7 +50,7 @@ import java.util.concurrent.Future;
 				Process proc = builder.start();
 
 				QuickStreamWriter.write(proc, new ArrayList<String>(){{add(cmd);}});
-				Exec.submit(StreamReader.newInstance(proc, lineListener, resultListener));
+				Exec.submit(StreamReader.newInstance(proc, true, lineListener, resultListener));
 				return new PrintWriter(proc.getOutputStream(), true);
 		}
 }
