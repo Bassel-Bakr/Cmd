@@ -30,46 +30,50 @@ public class Exec {
 				service = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 		}
 
-		public synchronized static void execute(Runnable runnable) {
+		public static void execute(Runnable runnable) {
 				service.execute(runnable);
 		}
 
-		public synchronized static void execute(Runnable[] runnables) {
-				for (Runnable runnable : runnables)
-						service.execute(runnable);
+		public static void execute(Runnable[] runnables) {
+				int size = runnables.length;
+				for (int i = 0; i < size; i++)
+						service.execute(runnables[i]);
 		}
 
-		public synchronized static void execute(List<Runnable> runnables) {
-				for (Runnable runnable : runnables)
-						service.execute(runnable);
+		public static void execute(List<Runnable> runnables) {
+				int size = runnables.size();
+				for (int i = 0; i < size; i++)
+						service.execute(runnables.get(i));
 		}
 
-		public synchronized static Future<StringBuilder> submit(Runnable runnable, StringBuilder result) {
+		public static Future<StringBuilder> submit(Runnable runnable, StringBuilder result) {
 				return service.submit(runnable, result);
 		}
 
-		public synchronized static Future<ShellResult> submit(Callable<ShellResult> callable) {
+		public static Future<ShellResult> submit(Callable<ShellResult> callable) {
 				return service.submit(callable);
 		}
 
 		public synchronized static Future<String>[] submit(Callable<String>[] callables) {
-				Future<String>[] futures = new Future[callables.length];
-
-				for (int i = 0; i < callables.length; i++)
+				int size = callables.length;
+				Future<String>[] futures = new Future[size];
+				
+				for (int i = 0; i < size; i++)
 						futures[i] = service.submit(callables[i]);
 
 				return futures;
 		}
 
-		public synchronized static List<Future<String>> submit(final List<Callable<String>> callables) {
+		public static List<Future<String>> submit(final List<Callable<String>> callables) {
 				return new ArrayList<Future<String>>()
 				{{
-								for (Callable<String> callable : callables)
-										add(service.submit(callable));
+								int size = callables.size();
+								for (int i = 0; i < size; i++)
+										add(service.submit(callables.get(i)));
 						}};
 		}
 
-		public synchronized static void shutdown() {
+		public static void shutdown() {
 				service.shutdown();
 		}
 }
